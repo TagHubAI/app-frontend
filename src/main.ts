@@ -1,7 +1,7 @@
 import { ViteSSG } from 'vite-ssg'
 import { setupLayouts } from 'virtual:generated-layouts'
 import Previewer from 'virtual:vue-component-preview'
-import { OhVueIcon, addIcons } from 'oh-vue-icons'
+import { OhVueIcon } from 'oh-vue-icons'
 // import {
 //   BiTypeH1,
 //   BiTypeH2,
