@@ -1,41 +1,5 @@
-<script setup lang="ts">
-const user = useUserStore()
-const name = $ref(user.savedName)
-const supabase = useSupabaseStore().supabaseClient
-const router = useRouter()
-const email = ref('')
-
-// Loading when submitting email address
-const loading = ref(false)
-
-// Whether the email is submitted successfully or not
-const isSubmitSucceed = ref('false')
-// const go = () => {
-//   if (name)
-//     router.push(`/hi/${encodeURIComponent(name)}`)
-// }
-
-
-// Handle login for supabase login
-const handleLogin = async () => {
-        try {
-          loading.value = true
-          const { error } = await supabase.auth.signInWithOtp({ email: email.value })
-          if (error) throw error
-          alert('Check your email for the login link!')
-        } catch (error) {
-          alert(error.error_description || error.message)
-        } finally {
-          loading.value = false
-          isSubmitSucceed.value = true 
-        }
-      }
-
-const { t } = useI18n()
-</script>
-
 <template>
-  <div class="flex items-center min-h-screen bg-gray-100 lg:justify-center">
+<div class="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center">
       <div
         class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
       >
@@ -52,17 +16,16 @@ const { t } = useI18n()
           <!--   <span>Don't have an account?</span> -->
           <!--   <a href="#" class="underline">Get Started!</a> -->
           <!-- </p> -->
-          <!-- <p class="mt-6 text-sm text-center text-gray-300"> -->
-          <!--   Read our <a href="#" class="underline">terms</a> and <a href="#" class="underline">conditions</a> -->
-          <!-- </p> -->
+          <p class="mt-6 text-sm text-center text-gray-300">
+            Read our <a href="#" class="underline">terms</a> and <a href="#" class="underline">conditions</a>
+          </p>
         </div>
         <div class="p-5 bg-white md:flex-1">
-          <h3 class="my-4 text-2xl font-semibold text-gray-700">Login</h3>
+          <h3 class="my-4 text-2xl font-semibold text-gray-700">Account Login</h3>
           <form action="#" class="flex flex-col space-y-5">
             <div class="flex flex-col space-y-1">
-              <label  for="email" class="text-sm font-semibold text-gray-500">Email address</label>
+              <label for="email" class="text-sm font-semibold text-gray-500">Email address</label>
               <input
-                v-model="email"
                 type="email"
                 id="email"
                 autofocus
@@ -89,29 +52,27 @@ const { t } = useI18n()
             <!--   /> -->
             <!--   <label for="remember" class="text-sm font-semibold text-gray-500">Remember me</label> -->
             <!-- </div> -->
-            <!-- <div> -->
-            <!--   <button -->
-            <!--     type="submit" -->
-            <!--     class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-black rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-blue-200 focus:ring-4" -->
-            <!--   > -->
-            <!--     Sign me up! -->
-            <!--   </button> -->
-            <!-- </div> -->
+            <div>
+              <button
+                type="submit"
+                class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-black rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
+              >
+              s  Sign me up!
+              </button>
+            </div>
             <div class="flex flex-col space-y-5">
-              <!-- <span class="flex items-center justify-center space-x-2"> -->
-              <!--   <span class="h-px bg-gray-400 w-14"></span> -->
-              <!--   <span class="font-normal text-gray-500">Already have an account?</span> -->
-              <!--   <span class="h-px bg-gray-400 w-14"></span> -->
-              <!-- </span> -->
+              <span class="flex items-center justify-center space-x-2">
+                <span class="h-px bg-gray-400 w-14"></span>
+                <span class="font-normal text-gray-500">Don't have an account?</span>
+                <span class="h-px bg-gray-400 w-14"></span>
+              </span>
               <div class="flex flex-col space-y-4">
                 <a
                   href="#"
-                  @click="handleLogin"
-                  class="flex items-center justify-center px-4 py-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-md group hover:bg-black focus:outline-none"
+                  class="flex items-center justify-center px-4 py-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-md group hover:bg-gray-800 focus:outline-none"
                 >
                   <span class="text-sm font-medium text-gray-800 group-hover:text-white">Send me magic link via email</span>
                 </a>
-                <span v-if="isSubmitSucceed"> Great now check your email!!</span>
                 <!-- <a -->
                 <!--   href="#" -->
                 <!--   class="flex items-center justify-center px-4 py-2 space-x-2 transition-colors duration-300 border border-blue-500 rounded-md group hover:bg-blue-500 focus:outline-none" -->
@@ -132,8 +93,3 @@ const { t } = useI18n()
       </div>
     </div>
 </template>
-
-<route lang="yaml">
-meta:
-  layout: home
-</route>

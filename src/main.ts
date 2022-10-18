@@ -4,12 +4,48 @@ import Previewer from 'virtual:vue-component-preview'
 import App from './App.vue'
 import type { UserModule } from './types'
 import generatedRoutes from '~pages'
+import { OhVueIcon, addIcons } from 'oh-vue-icons'
+import { 
+  MdDragindicator, 
+  HiTrash, 
+  HiPlus, 
+  HiSolidSearch, 
+  BiTextLeft, 
+  BiTypeH1, 
+  BiTypeH2, 
+  BiTypeH3, 
+  BiHr, 
+  BiQuote, 
+  BiBox, 
+  HiChevronDoubleLeft, 
+  HiChevronDoubleRight,
+  FaUserAstronaut,
+} from 'oh-vue-icons/icons'
 
 import '@unocss/reset/tailwind.css'
 import './styles/main.css'
+import './styles/lotion.css'
 import 'uno.css'
+import naive from 'naive-ui'
 
 const routes = setupLayouts(generatedRoutes)
+addIcons(
+  MdDragindicator, 
+  HiTrash, 
+  HiPlus, 
+  HiSolidSearch, 
+  BiTextLeft, 
+  BiTypeH1, 
+  BiTypeH2, 
+  BiTypeH3, 
+  BiHr, 
+  BiQuote, 
+  BiBox,
+  HiChevronDoubleLeft,
+  HiChevronDoubleRight,
+  FaUserAstronaut,
+)
+
 
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(
@@ -20,5 +56,7 @@ export const createApp = ViteSSG(
     Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
     ctx.app.use(Previewer)
+    ctx.app.use(naive)
+    ctx.app.component('v-icon', OhVueIcon)
   },
 )
