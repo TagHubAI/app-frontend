@@ -1,3 +1,33 @@
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { useMessage } from 'naive-ui'
+
+export default defineComponent({
+  setup() {
+    const message = useMessage()
+    return {
+      handleBack() {
+        message.info('[onBack]')
+      },
+      options: [
+        {
+          label: 'More episodes',
+          key: '1',
+        },
+        {
+          label: 'More episodes',
+          key: '2',
+        },
+        {
+          label: 'More episodes',
+          key: '3',
+        },
+      ],
+    }
+  },
+})
+</script>
+
 <template>
   <n-page-header subtitle="A podcast to improve designs" @back="handleBack">
     <n-grid :cols="5">
@@ -53,33 +83,3 @@
     </template>
   </n-page-header>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { useMessage } from 'naive-ui'
-
-export default defineComponent({
-  setup () {
-    const message = useMessage()
-    return {
-      handleBack () {
-        message.info('[onBack]')
-      },
-      options: [
-        {
-          label: 'More episodes',
-          key: '1'
-        },
-        {
-          label: 'More episodes',
-          key: '2'
-        },
-        {
-          label: 'More episodes',
-          key: '3'
-        }
-      ]
-    }
-  }
-})
-</script>

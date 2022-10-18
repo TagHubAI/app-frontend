@@ -3,11 +3,10 @@ import DividerBlock from '@/components/blocks/DividerBlock.vue'
 import HeadingBlock from '@/components/blocks/HeadingBlock.vue'
 import QuoteBlock from '@/components/blocks/QuoteBlock.vue'
 
-
 export interface Block {
-  id: string,
-  type: BlockType;
-  details: Details;
+  id: string
+  type: BlockType
+  details: Details
 }
 
 export enum BlockType {
@@ -16,12 +15,12 @@ export enum BlockType {
   H2 = 'H2',
   H3 = 'H3',
   Divider = 'DIVIDER',
-  Quote = 'QUOTE'
+  Quote = 'QUOTE',
 }
 
 export interface Details {
-  value?: string;
-  blockTypes?: BlockType[];
+  value?: string
+  blockTypes?: BlockType[]
 }
 
 export const BlockComponents = {
@@ -33,10 +32,10 @@ export const BlockComponents = {
   [BlockType.Quote]: QuoteBlock,
 }
 
-export const textBlockMap = [BlockType.Text, BlockType.Quote]
+export const textBlockMap:any = [BlockType.Text, BlockType.Quote]
 
 export const isTextBlock = (type: string) => {
-  return textBlockMap.some(textBlock => textBlock === type)
+  return textBlockMap.includes(type)
 }
 
 export const availableBlockTypes = [
@@ -77,4 +76,4 @@ export const availableBlockTypes = [
     blockType: BlockType.Quote,
     canSplit: true,
   },
-] as { type:string, icon:string, label:string, blockType:BlockType|string, canSplit:boolean }[]
+] as { type: string; icon: string; label: string; blockType: BlockType | string; canSplit: boolean }[]

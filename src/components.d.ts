@@ -10,14 +10,12 @@ declare module '@vue/runtime-core' {
     Accordion: typeof import('./components/Accordion.vue')['default']
     Breadcrumb: typeof import('./components/Breadcrumb.vue')['default']
     Counter: typeof import('./components/Counter.vue')['default']
-    CustomBlock: typeof import('./components/CustomBlock.vue')['default']
     Dashboard: typeof import('./components/Dashboard.vue')['default']
     EditorHeader: typeof import('./components/EditorHeader.vue')['default']
     Footer: typeof import('./components/Footer.vue')['default']
     README: typeof import('./components/README.md')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Sidebar: typeof import('./components/Sidebar.vue')['default']
     SidebarApp: typeof import('./components/SidebarApp.vue')['default']
   }
 }
