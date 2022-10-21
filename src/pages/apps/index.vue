@@ -1,7 +1,6 @@
 <template>
   <!-- Choose app section -->
   <div class="px-4 py-4">
-      router.push(`/apps`)
     <div class="text-lg text-black dark:text-white text-center">
       Choose your app
     </div>
