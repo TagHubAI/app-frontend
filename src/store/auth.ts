@@ -1,40 +1,62 @@
-// import { defineStore } from 'pinia'
-//
-// import { router } from '@/router'
-// import { useAlertStore } from '@/src/store'
-//
-// const baseUrl = `${import.meta.env.VITE_API_URL}/users`
+import { defineStore } from 'pinia'
+import { isJwtExpired } from 'jwt-check-expiration';
+import axios from 'axios'
 
-// export const useAuthStore = defineStore({
-  // id: 'auth',
-  // state: () => ({
-  //   // initialize state from local storage to enable user to stay logged in
-  //   user: JSON.parse(localStorage.getItem('user')),
-  //   returnUrl: null,
-  // }),
-  // actions: {
-  //   async login(email) {
-  //     try {
-  //       const user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password })
-  //
-  //       // update pinia state
-  //       this.user = user
-  //
-  //       // store user details and jwt in local storage to keep user logged in between page refreshes
-  //       localStorage.setItem('user', JSON.stringify(user))
-  //
-  //       // redirect to previous url or default to home page
-  //       router.push(this.returnUrl || '/')
-  //     }
-  //     catch (error) {
-  //       const alertStore = useAlertStore()
-  //       alertStore.error(error)
-  //     }
-  //   },
-  //   logout() {
-  //     this.user = null
-  //     localStorage.removeItem('user')
-  //     router.push('/home')
-  //   },
-  // },
-// })
+
+// Use message to announce login complete
+
+export const useAuthStore = defineStore({
+id: 'auth',
+state: () => ({
+  // initialize state from local storage to enable user to stay logged in
+  data: JSON.parse(localStorage.getItem('authData') as string),
+  returnUrl: null,
+}),
+actions: {
+  async login(email: string) {
+    const supabase = useSupabaseStore().supabaseClient
+
+    const { data, error } = await supabase.auth.signInWithOtp({ email: email })
+
+    // store user details and jwt in local storage to keep user logged in between page refreshes
+    localStorage.setItem('authData', JSON.stringify(data))
+
+    // Set to current auth data
+    this.data = data
+
+    return {data ,error}
+  },
+  setCurrentToken(token: string) {
+    localStorage.setItem('token', token)
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
+  },
+  isTokenExpired(token: string) {
+    if (isJwtExpired(token)) {
+      return true
+    }
+    return false
+  },
+  isCurrentTokenExpired() {
+      if ('token' in localStorage) {
+        return this.isTokenExpired(localStorage.getItem('token'))
+      }
+      return true
+  },
+  removeCurrentToken(){
+    localStorage.removeItem("token")
+  },
+  async isCurrentTokenValid() {
+    const token = localStorage.getItem('token') as string
+    // const { data: { user } } = await supabase.auth.getUser(token)
+    if (!this.isTokenExpired(token) && user && user.aud == "authenticated"){
+      return true
+    }
+    return false
+  },
+  logout() {
+    const router = useRouter()
+    this.data = null
+    this.removeCurrentToken()
+  },
+},
+})

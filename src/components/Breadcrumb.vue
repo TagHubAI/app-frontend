@@ -1,12 +1,11 @@
 <script setup lang="ts">
-const routeName = computed(() => useRoute().name ? useRoute().name?.toString() : "".toString())
+const routeName = computed(() => useRoute().name ? useRoute().name?.toString() : ''.toString())
 const routeList = computed(() => {
-  if (routeName.value) {
+  if (routeName.value)
     return routeName.value.split('-')
-  } else {
+  else
     return []
-    }
-  })
+})
 </script>
 
 <template>

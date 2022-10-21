@@ -32,7 +32,7 @@ export const BlockComponents = {
   [BlockType.Quote]: QuoteBlock,
 }
 
-export const textBlockMap:any = [BlockType.Text, BlockType.Quote]
+export const textBlockMap: any = [BlockType.Text, BlockType.Quote]
 
 export const isTextBlock = (type: string) => {
   return textBlockMap.includes(type)

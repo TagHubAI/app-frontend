@@ -1,10 +1,16 @@
 <script setup lang="ts">
+const auth = useAuthStore()
 const { t } = useI18n()
+const router = useRouter()
 // const toggleLocales = () => {
 // change to some real logic
 //   const locales = availableLocales
 //   locale.value = locales[(locales.indexOf(locale.value) + 1) % locales.length]
 // }
+const handleLogout = () => {
+  auth.logout()
+  router.push('/')
+}
 </script>
 
 <template>
@@ -18,15 +24,21 @@ const { t } = useI18n()
       <span class="mx-4 my-4">
         <div class="flex">
           <div class="inline-block">
-            <button class="icon-btn mx-2 !outline-none" :title="t('button.toggle_dark')" @click="toggleDark()">
-              <div i="carbon-sun dark:carbon-moon" />
-            </button>
-            <span>
-              Patrick (Credit left: 10000)
+            <span class="inline-block align-middle mt-2">
+              <button class="icon-btn mx-2 !outline-none" :title="t('button.toggle_dark')" @click="toggleDark()">
+                <div i="carbon-sun dark:carbon-moon" />
+              </button>
             </span>
-            <n-button class="text-white" icon-placement="left">
-              Log out
-            </n-button>
+            <span class="inline-block align-middle">
+              <span>
+                Patrick (Credit left: 10000)
+              </span>
+            </span>
+            <span class="inline-block align-middle pl-2">
+              <n-button @click='handleLogout' class="text-white">
+                Log out
+              </n-button>
+            </span>
           </div>
         </div>
       </span>
@@ -39,6 +51,7 @@ const { t } = useI18n()
     </div>
   </main>
 </template>
+
 
 <style>
 .full-height {

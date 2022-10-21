@@ -15,6 +15,7 @@ import { OhVueIcon } from 'oh-vue-icons'
 //   MdDragindicator,
 // } from 'oh-vue-icons/icons'
 import naive from 'naive-ui'
+import VueApexCharts from 'vue3-apexcharts'
 import App from './App.vue'
 import type { UserModule } from './types'
 import generatedRoutes from '~pages'
@@ -23,7 +24,7 @@ import '@unocss/reset/tailwind.css'
 import './styles/main.css'
 import './styles/lotion.css'
 import 'uno.css'
-
+//
 const routes = setupLayouts(generatedRoutes)
 // addIcons(
 //   MdDragindicator,
@@ -48,6 +49,8 @@ export const createApp = ViteSSG(
       .forEach(i => i.install?.(ctx))
     ctx.app.use(Previewer)
     ctx.app.use(naive)
+    ctx.app.use(VueApexCharts)
     ctx.app.component('v-icon', OhVueIcon)
   },
 )
+

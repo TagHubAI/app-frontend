@@ -1,36 +1,74 @@
 <script setup lang="ts">
-// const user = useUserStore()
-const supabase = useSupabaseStore().supabaseClient
-// const router = useRouter()
-const email = ref('')
+import { useMessage } from 'naive-ui'
+import { useLoadingBar } from 'naive-ui'
+
+const auth: any = useAuthStore()
+const email = ref<string>('')
 
 // Loading when submitting email address
 const loading = ref(false)
 
+const message = useMessage()
+const loadingBar = useLoadingBar()
+
 // Whether the email is submitted successfully or not
 const isSubmitSucceed = ref<Boolean>(false)
-// const go = () => {
-//   if (name)
-//     router.push(`/hi/${encodeURIComponent(name)}`)
-// }
 
 // Handle login for supabase login
 const handleLogin = async () => {
   try {
     loading.value = true
-    const { error } = await supabase.auth.signInWithOtp({ email: email.value })
-    if (error)
-      throw error
-    alert('Check your email for the login link!')
+    loadingBar.start()
+    const { error } = await auth.login(email.value)
+    if (error) 
+      throw(error)
+    message.info("Check your email for the magic link!")
+    loadingBar.finish()
   }
   catch (error) {
-    alert(error.error_description || error.message)
+    loadingBar.error()
+    message.error(error.error_description || error.message)
   }
   finally {
     loading.value = false
     isSubmitSucceed.value = true
   }
 }
+
+onBeforeMount(() => {
+  const axios:any = inject('axios')
+  const router = useRouter()
+
+  // Get query string that has auth key, slice from 1 because the 0th letter is hash (#)
+  const queryString: string = router.currentRoute.value.hash.slice(1,-1)
+  let params = new URLSearchParams(queryString)
+  if (queryString.length > 1 && !params.get("error")){
+    // Parse the queryString above to dict
+    // console.log(queryString)
+    const access_token = params.get("access_token")
+    const token_type = params.get("token_type")
+
+    auth.setCurrentToken(access_token)
+
+    // If key founder and valid then 
+    if (auth.isTokenExpired(access_token)) {
+      message.info("Your token is invalid (either expired or wrong)")
+    }
+    else {
+      try {
+        const user = axios.post('v1/user', {token: access_token})
+      }
+      catch (error) {
+        // Do nothing
+      }
+    }
+  }
+  // Try getting token
+  if (!auth.isCurrentTokenExpired()){
+    router.push(`/apps`)
+  }
+})
+
 
 // const { t } = useI18n()
 </script>
@@ -44,7 +82,7 @@ const handleLogin = async () => {
         class="p-4 py-6 text-white bg-black md:w-80 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly"
       >
         <div class="my-3 text-4xl font-bold tracking-wider text-center">
-          <a href="#">TagHub BI</a>
+          <a href="#">TagHub</a>
         </div>
         <p class="mt-6 font-normal text-center text-gray-300 md:mt-0">
           TagHub BI is a one-stop platform for crawling, processing, and visualize public data, either from social media, online services, or news!
@@ -110,11 +148,10 @@ const handleLogin = async () => {
               <a
                 href="#"
                 class="flex items-center justify-center px-4 py-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-md group hover:bg-black focus:outline-none"
-                @click="handleLogin"
+                @click='handleLogin'
               >
                 <span class="text-sm font-medium text-gray-800 group-hover:text-white">Send me magic link via email</span>
               </a>
-              <span v-if="isSubmitSucceed"> Great now check your email!!</span>
               <!-- <a -->
               <!--   href="#" -->
               <!--   class="flex items-center justify-center px-4 py-2 space-x-2 transition-colors duration-300 border border-blue-500 rounded-md group hover:bg-blue-500 focus:outline-none" -->

@@ -22,7 +22,9 @@ useHead({
 </script>
 
 <template>
-  <n-loading-bar-provider>
-    <RouterView />
-  </n-loading-bar-provider>
+  <n-message-provider>
+    <n-loading-bar-provider>
+      <RouterView />
+    </n-loading-bar-provider>
+  </n-message-provider>
 </template>
