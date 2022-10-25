@@ -3,7 +3,7 @@
 // you can use this to manipulate the document head in any components,
 // they will be rendered correctly in the html results with vite-ssg
 useHead({
-  title: 'Vitesse',
+  title: 'TagHub BI',
   meta: [
     { name: 'description', content: 'Opinionated Vite Starter Template' },
     {
@@ -22,5 +22,9 @@ useHead({
 </script>
 
 <template>
-  <RouterView />
+  <n-message-provider>
+    <n-loading-bar-provider>
+      <RouterView />
+    </n-loading-bar-provider>
+  </n-message-provider>
 </template>

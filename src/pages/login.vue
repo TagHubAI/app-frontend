@@ -1,80 +1,5 @@
-<script setup lang="ts">
-import { useMessage } from 'naive-ui'
-import { useLoadingBar } from 'naive-ui'
-
-const auth: any = useAuthStore()
-const email = ref<string>('')
-
-// Loading when submitting email address
-const loading = ref(false)
-
-const message = useMessage()
-const loadingBar = useLoadingBar()
-
-// Whether the email is submitted successfully or not
-const isSubmitSucceed = ref<Boolean>(false)
-
-// Handle login for supabase login
-const handleLogin = async () => {
-  try {
-    loading.value = true
-    loadingBar.start()
-    const { error } = await auth.login(email.value)
-    if (error) 
-      throw(error)
-    message.info("Check your email for the magic link!")
-    loadingBar.finish()
-  }
-  catch (error) {
-    loadingBar.error()
-    message.error(error.error_description || error.message)
-  }
-  finally {
-    loading.value = false
-    isSubmitSucceed.value = true
-  }
-}
-
-onBeforeMount(() => {
-  const axios:any = inject('axios')
-  const router = useRouter()
-
-  // Get query string that has auth key, slice from 1 because the 0th letter is hash (#)
-  const queryString: string = router.currentRoute.value.hash.slice(1,-1)
-  let params = new URLSearchParams(queryString)
-  if (queryString.length > 1 && !params.get("error")){
-    // Parse the queryString above to dict
-    // console.log(queryString)
-    const access_token = params.get("access_token")
-    const token_type = params.get("token_type")
-
-    auth.setCurrentToken(access_token)
-
-    // If key founder and valid then 
-    if (auth.isTokenExpired(access_token)) {
-      message.info("Your token is invalid (either expired or wrong)")
-    }
-    else {
-      try {
-        const user = axios.post('v1/user', {token: access_token})
-      }
-      catch (error) {
-        // Do nothing
-      }
-    }
-  }
-  // Try getting token
-  if (!auth.isCurrentTokenExpired()){
-    router.push(`/apps`)
-  }
-})
-
-
-// const { t } = useI18n()
-</script>
-
 <template>
-  <div class="flex  items-center min-h-screen bg-gray-100 lg:justify-center">
+  <div class="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center">
     <div
       class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
     >
@@ -82,7 +7,7 @@ onBeforeMount(() => {
         class="p-4 py-6 text-white bg-black md:w-80 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly"
       >
         <div class="my-3 text-4xl font-bold tracking-wider text-center">
-          <a href="#">TagHub</a>
+          <a href="#">TagHub BI</a>
         </div>
         <p class="mt-6 font-normal text-center text-gray-300 md:mt-0">
           TagHub BI is a one-stop platform for crawling, processing, and visualize public data, either from social media, online services, or news!
@@ -91,20 +16,19 @@ onBeforeMount(() => {
         <!--   <span>Don't have an account?</span> -->
         <!--   <a href="#" class="underline">Get Started!</a> -->
         <!-- </p> -->
-        <!-- <p class="mt-6 text-sm text-center text-gray-300"> -->
-        <!--   Read our <a href="#" class="underline">terms</a> and <a href="#" class="underline">conditions</a> -->
-        <!-- </p> -->
+        <p class="mt-6 text-sm text-center text-gray-300">
+          Read our <a href="#" class="underline">terms</a> and <a href="#" class="underline">conditions</a>
+        </p>
       </div>
       <div class="p-5 bg-white md:flex-1">
         <h3 class="my-4 text-2xl font-semibold text-gray-700">
-          Login
+          Account Login
         </h3>
         <form action="#" class="flex flex-col space-y-5">
           <div class="flex flex-col space-y-1">
             <label for="email" class="text-sm font-semibold text-gray-500">Email address</label>
             <input
               id="email"
-              v-model="email"
               type="email"
               autofocus
               class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
@@ -130,25 +54,24 @@ onBeforeMount(() => {
           <!--   /> -->
           <!--   <label for="remember" class="text-sm font-semibold text-gray-500">Remember me</label> -->
           <!-- </div> -->
-          <!-- <div> -->
-          <!--   <button -->
-          <!--     type="submit" -->
-          <!--     class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-black rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-blue-200 focus:ring-4" -->
-          <!--   > -->
-          <!--     Sign me up! -->
-          <!--   </button> -->
-          <!-- </div> -->
+          <div>
+            <button
+              type="submit"
+              class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-black rounded-md shadow hover:bg-gray-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
+            >
+              s  Sign me up!
+            </button>
+          </div>
           <div class="flex flex-col space-y-5">
-            <!-- <span class="flex items-center justify-center space-x-2"> -->
-            <!--   <span class="h-px bg-gray-400 w-14"></span> -->
-            <!--   <span class="font-normal text-gray-500">Already have an account?</span> -->
-            <!--   <span class="h-px bg-gray-400 w-14"></span> -->
-            <!-- </span> -->
+            <span class="flex items-center justify-center space-x-2">
+              <span class="h-px bg-gray-400 w-14" />
+              <span class="font-normal text-gray-500">Don't have an account?</span>
+              <span class="h-px bg-gray-400 w-14" />
+            </span>
             <div class="flex flex-col space-y-4">
               <a
                 href="#"
-                class="flex items-center justify-center px-4 py-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-md group hover:bg-black focus:outline-none"
-                @click='handleLogin'
+                class="flex items-center justify-center px-4 py-2 space-x-2 transition-colors duration-300 border border-gray-800 rounded-md group hover:bg-gray-800 focus:outline-none"
               >
                 <span class="text-sm font-medium text-gray-800 group-hover:text-white">Send me magic link via email</span>
               </a>
@@ -172,8 +95,3 @@ onBeforeMount(() => {
     </div>
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-  layout: home
-</route>
