@@ -95,6 +95,7 @@ onMounted(()=>{
                 <div class="p-2">
                   <n-space>
                     <n-tag v-for="(t,key) in topicItem.topic" v-bind:key="key">
+                      <!-- {{ t[0] }} ({{ t[1] }}%) -->
                       {{ emojify(t[0]) }} ({{ t[1] }}%)
                     </n-tag>
                   </n-space>
@@ -104,6 +105,7 @@ onMounted(()=>{
                     <div class="px-4">
                       <span v-for="(textLine,textLineKey) in topicItem.data"> 
                         [{{textLineKey}}] {{emojify(textLine)}}<br><br>
+                        <!-- [{{textLineKey}}] {{textLine}}<br><br> -->
                       </span>
                     </div>
                   </n-collapse-item>
